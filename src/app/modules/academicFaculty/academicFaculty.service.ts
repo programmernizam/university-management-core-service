@@ -10,6 +10,20 @@ const insertIntoDB = async (
   return result;
 };
 
+const getAllData = async () => {
+  const result = await prisma.academicFaculty.findMany();
+  const total = await prisma.academicFaculty.count();
+  return {
+    meta: {
+      page: 1,
+      limit: 5,
+      total,
+    },
+    data: result,
+  };
+};
+
 export const AcademicFacultyService = {
   insertIntoDB,
+  getAllData,
 };
