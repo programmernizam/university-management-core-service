@@ -4,15 +4,12 @@ import { AcademicSemesterController } from './academicSemester.controller';
 import { AcademicSemesterValidation } from './academicSemester.validation';
 const router = express.Router();
 
+router.get('/', AcademicSemesterController.getAllFormDB);
+router.get('/:id', AcademicSemesterController.getDataById);
 router.post(
   '/',
   validateRequest(AcademicSemesterValidation.create),
   AcademicSemesterController.insertIntoDB,
-);
-router.get(
-  '/',
-  validateRequest(AcademicSemesterValidation.create),
-  AcademicSemesterController.getAllFormDB,
 );
 
 export const AcademicSemesterRoutes = router;
