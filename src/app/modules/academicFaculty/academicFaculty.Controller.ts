@@ -2,6 +2,7 @@ import { AcademicFaculty } from '@prisma/client';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import { AcademicFacultyService } from './academicFaculty.service';
 
@@ -15,7 +16,9 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getAllData = catchAsync(async (req: Request, res: Response) => {
-  const result = await AcademicFacultyService.getAllData();
+  const filters = pick(req.query, ['searchTerm']);
+  const options = pick(req.query, ['limit', 'page', 'sortBy', 'sortOrder']);
+  const result = await AcademicFacultyService.getAllData(filters, options);
   sendResponse<AcademicFaculty[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
