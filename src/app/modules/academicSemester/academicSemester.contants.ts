@@ -4,3 +4,9 @@ export const AcademicSemesterSearchableFelids = [
   'startMonth',
   'endMonth',
 ];
+export const AcademicSemesterFilterableFelids = [
+  'searchTerm',
+  'code',
+  'startMonth',
+  'endMonth',
+];
