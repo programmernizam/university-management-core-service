@@ -1,9 +1,13 @@
-import { AcademicSemester, PrismaClient } from '@prisma/client';
+import { AcademicSemester, Prisma, PrismaClient } from '@prisma/client';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
+import { AcademicSemesterSearchableFelids } from './academicSemester.contants';
+import { IAcademicSemesterFilterRequest } from './academicSemester.interface';
 
 const prisma = new PrismaClient();
 const insertIntoDB = async (
-  academicSemesterData: AcademicSemester
+  academicSemesterData: AcademicSemester,
 ): Promise<AcademicSemester> => {
   const result = await prisma.academicSemester.create({
     data: academicSemesterData,
@@ -11,17 +15,38 @@ const insertIntoDB = async (
   return result;
 };
 
-const getAllFormDB = async (): Promise<
-  IGenericResponse<AcademicSemester[]>
-> => {
-  const result = await prisma.academicSemester.findMany();
+const getAllFormDB = async (
+  filters: IAcademicSemesterFilterRequest,
+  options: IPaginationOptions,
+): Promise<IGenericResponse<AcademicSemester[]>> => {
+  const { searchTerm, ...filterData } = filters;
+
+  const andCondition = [];
+  if (searchTerm) {
+    andCondition.push({
+      OR: AcademicSemesterSearchableFelids.map(filed => ({
+        [filed]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+  const whereCondition: Prisma.AcademicSemesterWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
+  const { page, limit, skip } = paginationHelpers.calculatePagination(options);
+  const result = await prisma.academicSemester.findMany({
+    where: whereCondition,
+    skip,
+    take: limit,
+  });
   const total = await prisma.academicSemester.count();
 
   return {
     meta: {
       total,
-      page: 1,
-      limit: 10,
+      page,
+      limit,
     },
     data: result,
   };
