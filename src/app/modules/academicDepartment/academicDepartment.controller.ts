@@ -23,8 +23,18 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getSingleData = catchAsync(async (req: Request, res: Response) => {
+  const result = await AcademicDepartmentService.getSingleData(req.params.id);
+  sendResponse<AcademicDepartment>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Department Data faceted!',
+    data: result,
+  });
+});
 
 export const AcademicDepartmentController = {
   insertIntoDB,
   getAllData,
+  getSingleData,
 };

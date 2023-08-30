@@ -22,7 +22,22 @@ const getAllData = async () => {
   return result;
 };
 
+const getSingleData = async (
+  id: string,
+): Promise<AcademicDepartment | null> => {
+  const result = await prisma.academicDepartment.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      academicFaculty: true,
+    },
+  });
+  return result;
+};
+
 export const AcademicDepartmentService = {
   insertIntoDB,
   getAllData,
+  getSingleData,
 };
