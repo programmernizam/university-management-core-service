@@ -13,6 +13,16 @@ const insertIntoDB = async (
   return result;
 };
 
+const getAllData = async () => {
+  const result = await prisma.academicDepartment.findMany({
+    include: {
+      academicFaculty: true,
+    },
+  });
+  return result;
+};
+
 export const AcademicDepartmentService = {
   insertIntoDB,
+  getAllData,
 };

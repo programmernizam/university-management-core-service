@@ -14,7 +14,17 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllData = catchAsync(async (req: Request, res: Response) => {
+  const result = await AcademicDepartmentService.getAllData();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Department Data faceted!',
+    data: result,
+  });
+});
 
 export const AcademicDepartmentController = {
   insertIntoDB,
+  getAllData,
 };
