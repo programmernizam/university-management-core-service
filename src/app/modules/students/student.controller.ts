@@ -19,7 +19,16 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
   sendResponse<Student[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
-    message: 'Student successfully created!',
+    message: 'Students data faceted successfully!',
+    data: result,
+  });
+});
+const getSingleData = catchAsync(async (req: Request, res: Response) => {
+  const result = await StudentService.getSingletData(req.params.id);
+  sendResponse<Student>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student data faceted successfully!',
     data: result,
   });
 });
@@ -27,4 +36,5 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
 export const StudentController = {
   insertIntoDB,
   getAllData,
+  getSingleData,
 };
