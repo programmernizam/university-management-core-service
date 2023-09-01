@@ -2,7 +2,9 @@ import { Student } from '@prisma/client';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
+import { StudentFilterableFields } from './student.constants';
 import { StudentService } from './student.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
@@ -15,12 +17,15 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getAllData = catchAsync(async (req: Request, res: Response) => {
-  const result = await StudentService.getAllData();
+  const filters = pick(req.query, StudentFilterableFields);
+  const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
+  const result = await StudentService.getAllData(filters, options);
   sendResponse<Student[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Students data faceted successfully!',
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 const getSingleData = catchAsync(async (req: Request, res: Response) => {

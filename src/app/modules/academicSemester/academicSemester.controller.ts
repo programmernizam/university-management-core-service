@@ -4,7 +4,7 @@ import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
 import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
-import { AcademicSemesterFilterableFelids } from './academicSemester.contants';
+import { AcademicSemesterFilterableFelids } from './academicSemester.constants';
 import { AcademicSemesterService } from './academicSemester.service';
 
 const insertIntoDB = catchAsync(async (req: Request, res: Response) => {

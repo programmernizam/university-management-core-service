@@ -4,7 +4,7 @@ import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { AcademicSemesterSearchableFelids } from './academicSemester.contants';
+import { AcademicSemesterSearchableFelids } from './academicSemester.constants';
 import { IAcademicSemesterFilterRequest } from './academicSemester.interface';
 
 const insertIntoDB = async (
