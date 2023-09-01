@@ -14,7 +14,17 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllData = catchAsync(async (req: Request, res: Response) => {
+  const result = await StudentService.getAllData();
+  sendResponse<Student[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student successfully created!',
+    data: result,
+  });
+});
 
 export const StudentController = {
   insertIntoDB,
+  getAllData,
 };
