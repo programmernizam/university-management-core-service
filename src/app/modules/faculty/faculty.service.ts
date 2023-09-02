@@ -81,9 +81,26 @@ const getSingleData = async (id: string): Promise<Faculty | null> => {
   });
   return result;
 };
+const updateIntoDB = async (
+  id: string,
+  payload: Partial<Faculty>,
+): Promise<Faculty> => {
+  const result = await prisma.faculty.update({
+    where: {
+      id,
+    },
+    include: {
+      academicDepartment: true,
+      academicFaculty: true,
+    },
+    data: payload,
+  });
+  return result;
+};
 
 export const FacultyService = {
   insetIntoDB,
   getAllData,
   getSingleData,
+  updateIntoDB,
 };

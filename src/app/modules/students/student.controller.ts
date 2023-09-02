@@ -48,10 +48,21 @@ const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const deleteFormDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await StudentService.deleteFromDB(id);
+  sendResponse<Student>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student Deleted successfully!',
+    data: result,
+  });
+});
 
 export const StudentController = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateIntoDB,
+  deleteFormDB,
 };
