@@ -37,8 +37,32 @@ const getSingleData = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await AcademicFacultyService.updateIntoDB(id, payload);
+  sendResponse<AcademicFaculty>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Faculty update successfully!',
+    data: result,
+  });
+});
+const deleteIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await AcademicFacultyService.deleteIntoDB(id);
+  sendResponse<AcademicFaculty>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Academic Faculty delete successfully!',
+    data: result,
+  });
+});
+
 export const AcademicFacultyController = {
   insertIntoDB,
   getAllData,
   getSingleData,
+  updateIntoDB,
+  deleteIntoDB,
 };
