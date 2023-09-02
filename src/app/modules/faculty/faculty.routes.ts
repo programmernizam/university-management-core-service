@@ -27,5 +27,24 @@ router.post(
   validateRequest(FacultyValidation.create),
   FacultyController.insertIntoDB,
 );
+router.patch(
+  '/',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.FACULTY,
+  ),
+  validateRequest(FacultyValidation.update),
+  FacultyController.updateIntoDB,
+);
+router.delete(
+  '/',
+  auth(
+    ENUM_USER_ROLE.SUPER_ADMIN,
+    ENUM_USER_ROLE.ADMIN,
+    ENUM_USER_ROLE.FACULTY,
+  ),
+  FacultyController.deleteIntoDB,
+);
 
 export const FacultyRoutes = router;

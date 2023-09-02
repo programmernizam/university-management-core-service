@@ -39,9 +39,32 @@ const getSingleData = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await FacultyService.updateIntoDB(id, payload);
+  sendResponse<Faculty>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Faculty update successfully!',
+    data: result,
+  });
+});
+const deleteIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const result = await FacultyService.deleteIntoDB(id);
+  sendResponse<Faculty>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Faculty delete successfully!',
+    data: result,
+  });
+});
 
 export const FacultyController = {
   insertIntoDB,
   getAllData,
   getSingleData,
+  updateIntoDB,
+  deleteIntoDB,
 };
