@@ -1,9 +1,11 @@
-import { Faculty } from '@prisma/client';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { Faculty, Prisma } from '@prisma/client';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
 import { IGenericResponse } from '../../../interfaces/common';
 import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { IFacultyFilterRequest } from './facultly.interface';
+import { FacultySearchableFields } from './faculty.constants';
+import { IFacultyFilterRequest } from './faculty.interface';
 
 const insetIntoDB = async (faculty: Faculty): Promise<Faculty> => {
   const result = await prisma.faculty.create({
@@ -15,17 +17,42 @@ const getAllData = async (
   filters: IFacultyFilterRequest,
   options: IPaginationOptions,
 ): Promise<IGenericResponse<Faculty[]>> => {
-  const { searchTerm, filterData } = filters;
+  const { searchTerm, ...filterData } = filters;
   const { skip, page, limit } = paginationHelpers.calculatePagination(options);
 
   const andCondition = [];
+  if (searchTerm) {
+    andCondition.push({
+      OR: FacultySearchableFields.map(filed => ({
+        [filed]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+  if (Object.keys(filterData).length > 0) {
+    andCondition.push({
+      AND: Object.keys(filterData).map(key => ({
+        [key]: {
+          equals: (filterData as any)[key],
+        },
+      })),
+    });
+  }
+  const whereCondition: Prisma.FacultyWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
 
   const result = await prisma.faculty.findMany({
-    where: {
-      OR: [],
-    },
+    where: whereCondition,
     skip,
     take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? {
+            [options.sortBy]: options.sortOrder,
+          }
+        : { createdAt: 'desc' },
     include: {
       academicFaculty: true,
       academicDepartment: true,
