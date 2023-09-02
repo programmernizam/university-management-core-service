@@ -37,9 +37,21 @@ const getSingleData = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await StudentService.updateIntoDB(id, payload);
+  sendResponse<Student>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Student updated successfully!',
+    data: result,
+  });
+});
 
 export const StudentController = {
   insertIntoDB,
   getAllData,
   getSingleData,
+  updateIntoDB,
 };
