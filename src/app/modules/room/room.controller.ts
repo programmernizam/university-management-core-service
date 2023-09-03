@@ -19,6 +19,15 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
   sendResponse<Room[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
+    message: 'Rooms data faceted successfully',
+    data: result,
+  });
+});
+const getSingleData = catchAsync(async (req: Request, res: Response) => {
+  const result = await RoomService.getSingleData(req.params.id);
+  sendResponse<Room>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
     message: 'Room data faceted successfully',
     data: result,
   });
@@ -27,4 +36,5 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
 export const RoomController = {
   insertIntoDB,
   getAllData,
+  getSingleData,
 };
