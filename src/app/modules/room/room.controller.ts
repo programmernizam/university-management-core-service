@@ -32,9 +32,21 @@ const getSingleData = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const { id } = req.params;
+  const payload = req.body;
+  const result = await RoomService.updateIntoDB(id, payload);
+  sendResponse<Room>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Room data update successfully',
+    data: result,
+  });
+});
 
 export const RoomController = {
   insertIntoDB,
   getAllData,
   getSingleData,
+  updateIntoDB,
 };

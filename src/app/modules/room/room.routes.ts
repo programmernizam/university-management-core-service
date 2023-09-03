@@ -12,5 +12,10 @@ router.post(
   validateRequest(RoomValidation.create),
   RoomController.insertIntoDB,
 );
+router.patch(
+  '/',
+  validateRequest(RoomValidation.update),
+  RoomController.updateIntoDB,
+);
 
 export const RoomRoutes = router;

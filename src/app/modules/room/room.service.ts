@@ -8,11 +8,33 @@ const insertIntoDB = async (room: Room): Promise<Room> => {
   return result;
 };
 const getAllData = async () => {
-  const result = await prisma.room.findMany();
+  const result = await prisma.room.findMany({
+    include: {
+      building: true,
+    },
+  });
   return result;
 };
 const getSingleData = async (id: string): Promise<Room | null> => {
-  const result = await prisma.room.findUnique({ where: { id } });
+  const result = await prisma.room.findUnique({
+    where: { id },
+    include: {
+      building: true,
+    },
+  });
+  return result;
+};
+const updateIntoDB = async (
+  id: string,
+  payload: Partial<Room>,
+): Promise<Room> => {
+  const result = await prisma.room.update({
+    where: { id },
+    data: payload,
+    include: {
+      building: true,
+    },
+  });
   return result;
 };
 
@@ -20,4 +42,5 @@ export const RoomService = {
   insertIntoDB,
   getAllData,
   getSingleData,
+  updateIntoDB,
 };
