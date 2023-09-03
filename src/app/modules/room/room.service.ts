@@ -7,7 +7,12 @@ const insertIntoDB = async (room: Room): Promise<Room> => {
   });
   return result;
 };
+const getAllData = async () => {
+  const result = await prisma.room.findMany();
+  return result;
+};
 
 export const RoomService = {
   insertIntoDB,
+  getAllData,
 };
