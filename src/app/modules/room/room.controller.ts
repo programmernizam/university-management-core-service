@@ -2,6 +2,7 @@ import { Room } from '@prisma/client';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
+import pick from '../../../shared/pick';
 import sendResponse from '../../../shared/sendResponse';
 import { RoomService } from './room.service';
 
@@ -15,7 +16,9 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 const getAllData = catchAsync(async (req: Request, res: Response) => {
-  const result = await RoomService.getAllData();
+  const filters = pick(req.query, ['searchTerm']);
+  const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
+  const result = await RoomService.getAllData(filters, options);
   sendResponse<Room[]>(res, {
     statusCode: httpStatus.OK,
     success: true,
@@ -44,9 +47,20 @@ const updateIntoDB = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
+const deleteIntoDB = catchAsync(async (req: Request, res: Response) => {
+  const result = await RoomService.deleteIntoDB(req.params.id);
+  sendResponse<Room>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Room data deleted successfully',
+    data: result,
+  });
+});
+
 export const RoomController = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateIntoDB,
+  deleteIntoDB,
 };

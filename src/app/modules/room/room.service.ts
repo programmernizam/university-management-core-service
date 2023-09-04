@@ -38,9 +38,17 @@ const updateIntoDB = async (
   return result;
 };
 
+const deleteIntoDB = async (id: string) => {
+  const result = await prisma.room.delete({
+    where: { id },
+  });
+  return result;
+};
+
 export const RoomService = {
   insertIntoDB,
   getAllData,
   getSingleData,
   updateIntoDB,
+  deleteIntoDB,
 };

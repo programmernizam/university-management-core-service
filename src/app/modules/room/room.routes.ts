@@ -17,5 +17,6 @@ router.patch(
   validateRequest(RoomValidation.update),
   RoomController.updateIntoDB,
 );
+router.delete('/', RoomController.deleteIntoDB);
 
 export const RoomRoutes = router;
