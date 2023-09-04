@@ -23,7 +23,8 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Rooms data faceted successfully',
-    data: result,
+    meta: result.meta,
+    data: result.data,
   });
 });
 const getSingleData = catchAsync(async (req: Request, res: Response) => {
