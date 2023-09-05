@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
+import { paginationHelpers } from '../../../helpers/paginationHelper';
+import { IGenericResponse } from '../../../interfaces/common';
+import { IPaginationOptions } from '../../../interfaces/pagination';
 import prisma from '../../../shared/prisma';
-import { ICourseData } from './course.interface';
+import { CourseFiltersRequest } from './course.constants';
+import { ICourseData, ICourseFilter } from './course.interface';
 
 const insertIntoDB = async (data: ICourseData): Promise<any> => {
   const { preRequisiteCourses, ...courseData } = data;
@@ -51,13 +56,48 @@ const insertIntoDB = async (data: ICourseData): Promise<any> => {
   throw new ApiError(httpStatus.BAD_REQUEST, 'Unable to create course');
 };
 
-const getAllData = async () => {
+const getAllData = async (
+  filters: ICourseFilter,
+  options: IPaginationOptions,
+): Promise<IGenericResponse<any>> => {
+  const { searchTerm } = filters;
+  const { page, limit, skip } = paginationHelpers.calculatePagination(options);
+
+  const andCondition = [];
+  if (searchTerm) {
+    andCondition.push({
+      OR: CourseFiltersRequest.map(field => ({
+        [field]: {
+          contains: searchTerm,
+          mode: 'insensitive',
+        },
+      })),
+    });
+  }
+  const whereCondition: Prisma.CourseWhereInput =
+    andCondition.length > 0 ? { AND: andCondition } : {};
+
   const result = await prisma.course.findMany({
+    where: whereCondition,
+    skip,
+    take: limit,
+    orderBy:
+      options.sortBy && options.sortOrder
+        ? { [options.sortBy]: options.sortOrder }
+        : { createdAt: 'desc' },
     include: {
       preRequisite: true,
     },
   });
-  return result;
+  const total = await prisma.course.count();
+  return {
+    meta: {
+      page,
+      limit,
+      total,
+    },
+    data: result,
+  };
 };
 
 const getSingleData = async (id: string) => {

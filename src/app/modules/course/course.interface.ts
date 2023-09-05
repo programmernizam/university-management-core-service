@@ -8,3 +8,6 @@ export type IPrerequisiteCourseRequest = {
   courseId: string;
   isDeleted?: null;
 };
+export type ICourseFilter = {
+  searchTerm?: string;
+};
