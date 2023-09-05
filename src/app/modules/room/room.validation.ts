@@ -5,14 +5,14 @@ const create = z.object({
     roomNumber: z.string({
       required_error: 'Room number required',
     }),
-    floorNumber: z.string({ required_error: 'Floor number required' }),
+    floor: z.string({ required_error: 'Floor number required' }),
     buildingId: z.string({ required_error: 'Building ID required' }),
   }),
 });
 const update = z.object({
   body: z.object({
     roomNumber: z.string().optional(),
-    floorNumber: z.string().optional(),
+    floor: z.string().optional(),
     buildingId: z.string().optional(),
   }),
 });
