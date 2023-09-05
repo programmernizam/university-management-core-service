@@ -12,5 +12,11 @@ router.post(
   validateRequest(CourseValidation.create),
   CourseController.insertIntoDB,
 );
+router.patch(
+  '/',
+  validateRequest(CourseValidation.update),
+  CourseController.updateData,
+);
+router.delete('/', CourseController.deleteData);
 
 export const CourseRoutes = router;

@@ -118,6 +118,18 @@ const updateData = async (id: string, payload: Course) => {
       id,
     },
     data: payload,
+    include: {
+      preRequisite: true,
+    },
+  });
+  return result;
+};
+
+const deleteData = async (id: string) => {
+  const result = await prisma.course.delete({
+    where: {
+      id,
+    },
   });
   return result;
 };
@@ -127,4 +139,5 @@ export const CourseService = {
   getAllData,
   getSingleData,
   updateData,
+  deleteData,
 };

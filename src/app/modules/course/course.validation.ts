@@ -13,7 +13,15 @@ const create = z.object({
     }),
   }),
 });
+const update = z.object({
+  body: z.object({
+    title: z.string().optional(),
+    code: z.string().optional(),
+    credits: z.string().optional(),
+  }),
+});
 
 export const CourseValidation = {
   create,
+  update,
 };
