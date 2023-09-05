@@ -13,7 +13,17 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
     data: result,
   });
 });
+const getAllData = catchAsync(async (req: Request, res: Response) => {
+  const result = await CourseService.getAllData();
+  sendResponse(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Course data faceted successfully',
+    data: result,
+  });
+});
 
 export const CourseController = {
   insertIntoDB,
+  getAllData,
 };

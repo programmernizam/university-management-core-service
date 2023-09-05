@@ -51,6 +51,12 @@ const insertIntoDB = async (data: ICourseData): Promise<any> => {
   throw new ApiError(httpStatus.BAD_REQUEST, 'Unable to create course');
 };
 
+const getAllData = async () => {
+  const result = await prisma.course.findMany();
+  return result;
+};
+
 export const CourseService = {
   insertIntoDB,
+  getAllData,
 };
