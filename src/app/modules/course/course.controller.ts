@@ -1,3 +1,4 @@
+import { Course } from '@prisma/client';
 import { Request, Response } from 'express';
 import httpStatus from 'http-status';
 import catchAsync from '../../../shared/catchAsync';
@@ -15,7 +16,16 @@ const insertIntoDB = catchAsync(async (req: Request, res: Response) => {
 });
 const getAllData = catchAsync(async (req: Request, res: Response) => {
   const result = await CourseService.getAllData();
-  sendResponse(res, {
+  sendResponse<Course[]>(res, {
+    statusCode: httpStatus.OK,
+    success: true,
+    message: 'Courses data faceted successfully',
+    data: result,
+  });
+});
+const getSingleData = catchAsync(async (req: Request, res: Response) => {
+  const result = await CourseService.getSingleData(req.params.id);
+  sendResponse<Course>(res, {
     statusCode: httpStatus.OK,
     success: true,
     message: 'Course data faceted successfully',
@@ -26,4 +36,5 @@ const getAllData = catchAsync(async (req: Request, res: Response) => {
 export const CourseController = {
   insertIntoDB,
   getAllData,
+  getSingleData,
 };

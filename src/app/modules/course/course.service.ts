@@ -52,11 +52,28 @@ const insertIntoDB = async (data: ICourseData): Promise<any> => {
 };
 
 const getAllData = async () => {
-  const result = await prisma.course.findMany();
+  const result = await prisma.course.findMany({
+    include: {
+      preRequisite: true,
+    },
+  });
+  return result;
+};
+
+const getSingleData = async (id: string) => {
+  const result = await prisma.course.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      preRequisite: true,
+    },
+  });
   return result;
 };
 
 export const CourseService = {
   insertIntoDB,
   getAllData,
+  getSingleData,
 };
