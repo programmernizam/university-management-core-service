@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Prisma } from '@prisma/client';
+import { Course, Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
 import ApiError from '../../../errors/ApiError';
 import { paginationHelpers } from '../../../helpers/paginationHelper';
@@ -112,8 +112,19 @@ const getSingleData = async (id: string) => {
   return result;
 };
 
+const updateData = async (id: string, payload: Course) => {
+  const result = await prisma.course.update({
+    where: {
+      id,
+    },
+    data: payload,
+  });
+  return result;
+};
+
 export const CourseService = {
   insertIntoDB,
   getAllData,
   getSingleData,
+  updateData,
 };
