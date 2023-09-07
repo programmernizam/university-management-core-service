@@ -139,8 +139,8 @@ model CourseToPrerequisites {
   courseId       String
   prerequisiteId String
 
-  course      Course @relation(fields: [courseId], references: [id], name: "CourseToPrerequisite")
-  preReuisite Course @relation(fields: [prerequisiteId], references: [id], name: "PrerequisiteToCourse")
+  course       Course @relation(fields: [courseId], references: [id], name: "CourseToPrerequisite")
+  preRequisite Course @relation(fields: [prerequisiteId], references: [id], name: "PrerequisiteToCourse")
 
   @@id([courseId, prerequisiteId])
 }

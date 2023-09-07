@@ -41,7 +41,7 @@ const insertIntoDB = async (data: ICourseData): Promise<any> => {
       include: {
         preRequisite: {
           include: {
-            preReuisite: true,
+            preRequisite: true,
           },
         },
         preRequisiteFor: {
