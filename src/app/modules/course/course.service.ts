@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Course, Prisma } from '@prisma/client';
 import httpStatus from 'http-status';
@@ -112,12 +113,17 @@ const getSingleData = async (id: string) => {
   return result;
 };
 
-const updateData = async (id: string, payload: Course) => {
+const updateData = async (
+  id: string,
+  payload: ICourseData,
+): Promise<Course | null> => {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { preRequisiteCourses, ...CourseData } = payload;
   const result = await prisma.course.update({
     where: {
       id,
     },
-    data: payload,
+    data: CourseData,
     include: {
       preRequisite: true,
     },
