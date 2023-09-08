@@ -117,16 +117,22 @@ const updateData = async (
   id: string,
   payload: ICourseData,
 ): Promise<Course | null> => {
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { preRequisiteCourses, ...CourseData } = payload;
-  const result = await prisma.course.update({
-    where: {
-      id,
-    },
-    data: CourseData,
-    include: {
-      preRequisite: true,
-    },
+
+  await prisma.$transaction(async transactionClient => {
+    const result = await transactionClient.course.update({
+      where: {
+        id,
+      },
+      data: CourseData,
+      include: {
+        preRequisite: true,
+      },
+    });
+    if (!result) {
+      throw new ApiError(httpStatus.BAD_REQUEST, 'Unable to update course');
+    }
+    if(preRequisiteCourses && preRequisiteCourses.length)
   });
   return result;
 };
