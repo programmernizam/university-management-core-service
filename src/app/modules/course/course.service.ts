@@ -154,9 +154,35 @@ const updateData = async (
           },
         });
       }
+      for (let index = 0; index < newPrerequisite.length; index++) {
+        await transactionClient.courseToPrerequisites.create({
+          data: {
+            courseId: id,
+            prerequisiteId: newPrerequisite[index].courseId,
+          },
+        });
+      }
     }
+    return result;
   });
-  return result;
+  const responseData = await prisma.course.findUnique({
+    where: {
+      id: id,
+    },
+    include: {
+      preRequisite: {
+        include: {
+          preRequisite: true,
+        },
+      },
+      preRequisiteFor: {
+        include: {
+          course: true,
+        },
+      },
+    },
+  });
+  return responseData;
 };
 
 const deleteData = async (id: string) => {
