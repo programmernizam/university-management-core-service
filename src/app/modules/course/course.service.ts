@@ -132,7 +132,29 @@ const updateData = async (
     if (!result) {
       throw new ApiError(httpStatus.BAD_REQUEST, 'Unable to update course');
     }
-    if(preRequisiteCourses && preRequisiteCourses.length)
+    if (preRequisiteCourses && preRequisiteCourses.length > 0) {
+      const deletePrerequisite = preRequisiteCourses.filter(
+        coursePrerequisite =>
+          coursePrerequisite.courseId && coursePrerequisite.isDeleted,
+      );
+      const newPrerequisite = preRequisiteCourses.filter(
+        coursePrerequisite =>
+          coursePrerequisite.courseId && !coursePrerequisite.isDeleted,
+      );
+
+      for (let index = 0; index < deletePrerequisite.length; index++) {
+        await transactionClient.courseToPrerequisites.deleteMany({
+          where: {
+            AND: [
+              { courseId: id },
+              {
+                prerequisiteId: deletePrerequisite[index].courseId,
+              },
+            ],
+          },
+        });
+      }
+    }
   });
   return result;
 };
