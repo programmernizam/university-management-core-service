@@ -22,6 +22,7 @@ const insertIntoDB = async (data: ICourseData): Promise<any> => {
     }
     if (preRequisiteCourses && preRequisiteCourses.length > 0) {
       for (let index = 0; index < preRequisiteCourses.length; index++) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const createPrerequisite =
           await transactionClient.courseToPrerequisites.create({
             data: {
@@ -29,7 +30,6 @@ const insertIntoDB = async (data: ICourseData): Promise<any> => {
               prerequisiteId: preRequisiteCourses[index].courseId,
             },
           });
-        console.log(createPrerequisite);
       }
       return result;
     }
