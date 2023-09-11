@@ -94,9 +94,6 @@ const deleteIntoDB = async (id: string): Promise<AcademicFaculty> => {
     where: {
       id,
     },
-    include: {
-      academicDepartments: true,
-    },
   });
   return result;
 };
